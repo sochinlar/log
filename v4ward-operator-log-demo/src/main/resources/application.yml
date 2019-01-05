@@ -1,0 +1,27 @@
+server:
+  port: 9002
+
+spring:
+  profiles:
+    active: dev
+  http:
+    encoding:
+      force: true
+  main:
+    allow-bean-definition-overriding: true
+  datasource:
+    dynamic:
+      primary: v4wardLog
+      datasource:
+        v4wardLog:
+          driver-class-name: com.mysql.jdbc.Driver
+          url: jdbc:mysql://localhost:3306/v4ward_log?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+          username: root
+          password: 123456
+mybatis-plus:
+  mapper-locations: classpath*:/com/v4ward/**/mapper/xml/*Mapper.xml,classpath*:/com/v4ward/**/mapper/*Mapper.xml,classpath*:/mapper/**/*.xml
+  global-config:
+    banner: false
+  configuration:
+    jdbc-type-for-null: null
+    map-underscore-to-camel-case: true
