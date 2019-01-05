@@ -3,7 +3,7 @@
 <mapper namespace="com.gameley.mapper.OperatelogDao">
 
 	<!-- 通用查询映射结果 -->
-	<resultMap id="BaseResultMap" type="com.soc.v4ward.log.entity.OperateLog">
+	<resultMap id="BaseResultMap" type="com.soc.v4ward.log.entity.SysOperateLog">
 		            <result property="id" column="id"/>
 		            <result property="username" column="username"/>
 		            <result property="modifydate" column="modifydate"/>

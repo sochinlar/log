@@ -1,6 +1,5 @@
 package com.soc.v4ward.log.demo.service.impl;
 
-import com.baomidou.mybatisplus.extension.service.IService;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.soc.v4ward.log.demo.entity.Demo;
 import com.soc.v4ward.log.demo.mapper.DemoMapper;

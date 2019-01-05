@@ -13,7 +13,7 @@ import java.lang.annotation.*;
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface EnableGameleyLog {
+public @interface EnableOperateLog {
     /**
      * 操作的中文说明 可以直接调用ModifyName
      * @return
@@ -25,20 +25,20 @@ public @interface EnableGameleyLog {
      * 则使用默认解析类
      * @return
      */
-    Class parseclass() default DefaultContentParse.class;
+    Class parseClass() default DefaultContentParse.class;
 
     /**
      * 查询数据库所调用的class文件
      * @return
      */
-    Class serviceclass() default IService.class;
+    Class serviceClass() default IService.class;
 
     /**
      * 前台字段名称
      */
-    String[] feildName() default {"id"};
+    String[] fieldName() default {"id"};
     /**
      * 具体业务操作名称
      */
-    String handleName() default "";
+    String businessName() default "";
 }

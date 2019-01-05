@@ -8,14 +8,15 @@ import java.util.Map;
 
 /**
  * 获取jwt信息类
+ * @author NieYinjun
  */
 public class BaseContextHandler {
-    public static ThreadLocal<Map<String, Object>> threadLocal = new ThreadLocal<Map<String, Object>>();
+    public static ThreadLocal<Map<String, Object>> threadLocal = new ThreadLocal<>();
 
     public static void set(String key, Object value) {
         Map<String, Object> map = threadLocal.get();
         if (map == null) {
-            map = new HashMap<String, Object>();
+            map = new HashMap<>(16);
             threadLocal.set(map);
         }
         map.put(key, value);
@@ -24,7 +25,7 @@ public class BaseContextHandler {
     public static Object get(String key){
         Map<String, Object> map = threadLocal.get();
         if (map == null) {
-            map = new HashMap<String, Object>();
+            map = new HashMap<>(16);
             threadLocal.set(map);
         }
         return map.get(key);

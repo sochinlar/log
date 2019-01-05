@@ -1,6 +1,6 @@
 package com.soc.v4ward.log.parser;
 
-import com.soc.v4ward.log.EnableGameleyLog;
+import com.soc.v4ward.log.EnableOperateLog;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -21,10 +21,10 @@ public interface ContentParser {
 
     /**
      * 获取信息返回查询出的对象
-     * @param feildValues 查询条件的参数值
-     * @param enableGameleyLog 注解
+     * @param fieldValues 查询条件的参数值
+     * @param sysOperateLog 注解
      * @return
      */
-    public Object getResult(Map<String, Object> feildValues, EnableGameleyLog enableGameleyLog);
+    public Object getResult(Map<String, Object> fieldValues, EnableOperateLog sysOperateLog);
 }
 

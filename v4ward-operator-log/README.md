@@ -13,13 +13,13 @@
 - fastjson
 - aop
 ### 使用
-1. 在需要记录的方法上使用注解EnableGameleyLog
+1. 在需要记录的方法上使用注解EnableOperateLog
 参数如下：
 ```
 @Documented
 @Retention(RetentionPolicy.RUNTIME)
 @Target({ElementType.METHOD})
-public @interface EnableGameleyLog {
+public @interface EnableOperateLog {
     /**
      * 操作的中文说明 可以直接调用ModifyName
      * @return
@@ -48,7 +48,7 @@ public @interface EnableGameleyLog {
 ```
 简单例子：
  ```
- @EnableGameleyLog(name = ModifyName.SAVE,serviceclass = DemoService.class)
+ @EnableOperateLog(name = ModifyName.SAVE,serviceclass = DemoService.class)
     public BaseResponse addDemo(@RequestBody Demo demo){
         ...
     }
@@ -65,7 +65,7 @@ public @interface EnableGameleyLog {
  */
 public class DefaultContentParse implements ContentParser {
     @Override
-    public Object getResult(Map<String,Object> feildValues, EnableGameleyLog enableGameleyLog) {
+    public Object getResult(Map<String,Object> feildValues, EnableOperateLog enableGameleyLog) {
         Assert.isTrue(feildValues.containsKey("id"),"未解析到id值，请检查前台传递参数是否正确");
         Object result= feildValues.get("id");
         Integer id=0;

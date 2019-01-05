@@ -1,15 +1,13 @@
 package com.soc.v4ward.log.util;
 
 import com.baomidou.mybatisplus.annotation.TableId;
-import com.soc.v4ward.log.DataName;
+import com.soc.v4ward.log.dto.UpdateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
 
 import java.lang.reflect.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * 反射工具类.
@@ -325,8 +323,8 @@ public class ReflectionUtils {
 	 * @throws ClassNotFoundException
 	 * @throws IllegalAccessException
 	 */
-	public static List<Map<String ,Object>> compareTwoClass(Object class1, Object class2) throws ClassNotFoundException, IllegalAccessException {
-		List<Map<String,Object>> list=new ArrayList<Map<String, Object>>();
+	public static List<UpdateDTO> compareTwoClass(Object class1, Object class2) throws ClassNotFoundException, IllegalAccessException {
+		List<UpdateDTO> updateList = new ArrayList<>();
 		//获取对象的class
 		Class<?> clazz1 = class1.getClass();
 		Class<?> clazz2 = class2.getClass();
@@ -345,25 +343,26 @@ public class ReflectionUtils {
 						field2[j].setAccessible(true);
 						//如果field1[i]属性值与field2[j]属性值内容不相同
 						if (!compareTwo(field1[i].get(class1), field2[j].get(class2))) {
-							Map<String, Object> map2 = new HashMap<String, Object>();
-							DataName name=field1[i].getAnnotation(DataName.class);
+							UpdateDTO updateDTO = new UpdateDTO();
+			/**				DataName name=field1[i].getAnnotation(DataName.class);
 							String fieldName="";
 							if(name!=null){
 								fieldName=name.name();
 							}else {
 								fieldName=field1[i].getName();
-							}
-							map2.put("name", fieldName);
-							map2.put("old", field1[i].get(class1));
-							map2.put("new", field2[j].get(class2));
-							list.add(map2);
+							}*/
+							updateDTO.setColumn(field1[i].getName());
+							updateDTO.setOldValue(field1[i].get(class1));
+							updateDTO.setNewValue(field2[j].get(class2));
+							updateList.add(updateDTO);
 						}
 						break;
 					}
 				}
 			}
 		}
-		return list;
+		//return list;
+		return updateList;
 
 	}
 	/**

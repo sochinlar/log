@@ -1,7 +1,7 @@
 package com.soc.v4ward.log.parser;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.soc.v4ward.log.EnableGameleyLog;
+import com.soc.v4ward.log.EnableOperateLog;
 import com.soc.v4ward.log.util.SpringUtil;
 import org.springframework.util.Assert;
 
@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class DefaultContentParse implements ContentParser {
     @Override
-    public Object getResult(Map<String,Object> feildValues, EnableGameleyLog enableGameleyLog) {
+    public Object getResult(Map<String,Object> feildValues, EnableOperateLog enableGameleyLog) {
         Assert.isTrue(feildValues.containsKey("id"),"未解析到id值，请检查前台传递参数是否正确");
         Object result= feildValues.get("id");
         Long id=0L;
@@ -29,7 +29,7 @@ public class DefaultContentParse implements ContentParser {
             id = (Long) result;
         }
         IService service= null;
-        Class cls=enableGameleyLog.serviceclass();
+        Class cls=enableGameleyLog.serviceClass();
         service = (IService) SpringUtil.getBean(cls);
 
         return  service.getById(id);

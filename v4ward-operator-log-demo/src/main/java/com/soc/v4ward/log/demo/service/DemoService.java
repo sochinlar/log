@@ -1,7 +1,6 @@
 package com.soc.v4ward.log.demo.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
-import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.soc.v4ward.log.demo.entity.Demo;
 
 import java.io.Serializable;

@@ -1,6 +1,6 @@
 package com.soc.v4ward.log.auto;
 
-import com.soc.v4ward.log.Interceptor.ModifyAspect;
+import com.soc.v4ward.log.interceptor.ModifyAspect;
 import com.soc.v4ward.log.util.SpringUtil;
 import com.v4ward.core.mybatis.configuration.MyBatisPlusConfiguration;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
