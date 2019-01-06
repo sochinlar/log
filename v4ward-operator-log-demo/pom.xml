@@ -14,13 +14,14 @@
     <dependencies>
         <dependency>
             <groupId>com.v4ward</groupId>
-            <artifactId>v4ward-web</artifactId>
+            <artifactId>v4ward-starter</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.spring4all</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>com.v4ward</groupId>
-            <artifactId>v4ward-mybatis</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
@@ -28,7 +29,7 @@
         </dependency>
 
         <dependency>
-            <groupId>com.soc</groupId>
+            <groupId>com.v4ward</groupId>
             <artifactId>v4ward-operator-log</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>

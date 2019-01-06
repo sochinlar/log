@@ -1,5 +1,7 @@
 server:
-  port: 9002
+  port: 8060
+  servlet:
+    context-path: /lims
 
 spring:
   profiles:
@@ -15,11 +17,28 @@ spring:
       datasource:
         v4wardLog:
           driver-class-name: com.mysql.jdbc.Driver
-          url: jdbc:mysql://localhost:3306/v4ward_log?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=UTC
+          url: jdbc:mysql://localhost:3306/v4ward_log?useUnicode=true&characterEncoding=utf8&useSSL=true&serverTimezone=GMT%2B8
           username: root
           password: 123456
+  redis:
+    #host: 192.168.185.13
+    host: 127.0.0.1
+    password: whxx123.
+    database: 0
+    port: 6379
+    timeout: 5000ms
+    #lettuce:
+    jedis:
+      pool:
+        max-active: 8
+        max-wait: -1ms
+        min-idle: 0
+        max-idle: 8
+#jwt 过期时间
+jwt:
+  expiration: 12h
 mybatis-plus:
-  mapper-locations: classpath*:/com/v4ward/**/mapper/xml/*Mapper.xml,classpath*:/com/v4ward/**/mapper/*Mapper.xml,classpath*:/mapper/**/*.xml
+  mapper-locations: classpath*:/com/v4ward/**/mapper/xml/*Mapper.xml,classpath*:/com/v4ward/**/mapper/*Mapper.xml
   global-config:
     banner: false
   configuration:

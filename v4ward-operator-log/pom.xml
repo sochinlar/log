@@ -1,47 +1,62 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-    <parent>
-        <artifactId>log</artifactId>
-        <groupId>com.soc</groupId>
-        <version>0.0.1-SNAPSHOT</version>
-    </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>v4ward-operator-log</artifactId>
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <configuration>
-                    <source>1.8</source>
-                    <target>1.8</target>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-    <packaging>jar</packaging>
 
-    <name>wwmxd-log</name>
+    <groupId>com.v4ward</groupId>
+    <artifactId>v4ward-operator-log</artifactId>
+    <version>0.0.1-SNAPSHOT</version>
+    <packaging>jar</packaging>
+    <build>
+       <finalName>${project.artifactId}</finalName>
+    </build>
+
+    <name>v4ward-operator-log</name>
+
+    <description>基于v4ward-base扩展出来的操作日志记录模块</description>
+    <developers>
+        <developer>
+            <id>NYJ水流星</id>
+            <name>NYJ</name>
+            <email>408448680@qq.com</email>
+            <roles>
+                <role>PM</role>
+                <role>Developer</role>
+            </roles>
+        </developer>
+    </developers>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+        <java.version>1.8</java.version>
+        <v4ward.version>0.0.1-SNAPSHOT</v4ward.version>
+        <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-aop</artifactId>
+            <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
             <groupId>com.v4ward</groupId>
             <artifactId>v4ward-mybatis</artifactId>
+            <version>${v4ward.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.v4ward</groupId>
+            <artifactId>v4ward-security</artifactId>
+            <version>${v4ward.version}</version>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
