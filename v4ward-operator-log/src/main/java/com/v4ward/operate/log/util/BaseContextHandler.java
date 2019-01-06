@@ -1,15 +1,5 @@
 package com.v4ward.operate.log.util;
 
-
-
-
-
-
-
-
-import com.v4ward.core.security.ContextUtil;
-import com.v4ward.core.security.orm.SysUser;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -19,16 +9,6 @@ import java.util.Optional;
  * @author NieYinjun
  */
 public class BaseContextHandler {
-
-    public static Long getUserId(){
-        Optional<SysUser> loginUser = ContextUtil.getLoginUser();
-        if(loginUser.isPresent()){
-            return loginUser.get().getId();
-        }
-        return null;
-    }
-
-
 
     public static ThreadLocal<Map<String, Object>> threadLocal = new ThreadLocal<>();
 

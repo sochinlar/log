@@ -4,6 +4,7 @@ import com.v4ward.core.web.http.RestResponseEntity;
 import com.v4ward.operate.log.V4wardLog;
 import com.v4ward.operate.log.demo.entity.Demo;
 import com.v4ward.operate.log.demo.service.DemoService;
+import com.v4ward.operate.log.parser.DefaultContentParse;
 import com.v4ward.operate.log.util.ModifyName;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +23,8 @@ public class DemoController {
     private DemoService demoService;
 
     @PostMapping
-    @V4wardLog(name = ModifyName.SAVE,serviceClass = DemoService.class)
+    @V4wardLog(name = ModifyName.SAVE,serviceClass = DemoService.class,businessName = "新增用户信息",
+    dataIndex = 0,parseClass = DefaultContentParse.class,fieldName = "id")
     public Object addDemo(@RequestBody Demo demo){
         demoService.insert(demo);
         return RestResponseEntity.ok("新增成功！");

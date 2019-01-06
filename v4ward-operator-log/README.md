@@ -1,4 +1,4 @@
- 
+# v4ward-operate-log的使用说明
 
 ### 简介
    当对业务内容进行编辑时，记录何人何时何ip进行何种改动（包含了原值和修改后的值），保存到数据库中
@@ -7,53 +7,54 @@
 ### 环境
 - maven
 - jdk 1.8
-- spring boot 1.5.5 release
+- spring boot 2.x release
 - mysql 5.0+
-- mybatis-plus
-- fastjson
-- aop
+- mybatis-plus (已经引入到本包，后续使用不必再引用依赖)
+- fastjson (已经引入到本包，后续使用不必再引用依赖)
+- aop (已经引入到本包，后续使用不必再引用依赖)
+- lombok (已经引入到本包，后续使用不必再引用依赖)
 ### 使用
-1. 在需要记录的方法上使用注解EnableOperateLog
-参数如下：
+1. 添加依赖
 ```
-@Documented
-@Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.METHOD})
-public @interface EnableOperateLog {
-    /**
-     * 操作的中文说明 可以直接调用ModifyName
-     * @return
-     */
-    String name() default "";
-
-    /**
-     * 获取编辑信息的解析类，目前为使用id获取，复杂的解析需要自己实现，默认不填写
-     * 则使用默认解析类
-     * @return
-     */
-    Class parseclass() default DefaultContentParse.class;
-
-    /**
-     * 查询数据库所调用的class文件
-     * @return
-     */
-    Class serviceclass() default IService.class;
-
-    /**
-     * 前台字段名称
-     */
-    String[] feildName() default {"id"};
-
-}
+    <dependency>
+        <groupId>com.v4ward</groupId>
+        <artifactId>v4ward-operator-log</artifactId>
+        <version>0.0.1-SNAPSHOT</version>
+    </dependency>
 ```
-简单例子：
- ```
- @EnableOperateLog(name = ModifyName.SAVE,serviceclass = DemoService.class)
-    public BaseResponse addDemo(@RequestBody Demo demo){
-        ...
-    }
+
+2. 在启动类上面加注解 @EnableV4wardLog
+
+3. 在需要记录的方法上使用注解 @V4wardLog
+
++ 简单例子：
 ```
-2.编写解析类，默认的解析类为使用id查询，自定义的解析类请继承ContentParser接口，并在注解中赋值
+    @V4wardLog(name = ModifyName.SAVE,serviceClass = DemoService.class,businessName = "新增用户信息",
+       dataIndex = 0,parseClass = DefaultContentParse.class,fieldName = "id")
+       public Object addDemo(@RequestBody Demo demo){
+           demoService.insert(demo);
+           return RestResponseEntity.ok("新增成功！");
+       }
+```
+
++ 参数说明：
+```
+1、name:         必填参数！！！     ModifyName枚举类型的参数操作名称（新增，修改，删除），根据操作的业
+                                    务选对应的类型，对于log表中的operate_type字段。
+2、serviceClass：必填参数！！！     指定操作数据的service接口类，根据操作的业务填对应的service 
+3、businessName：选填参数！         业务名称，对应log表中的business_name字段，不填则记录操作接口的URI
+4、dataIndex：   根据参数来决定是否必填！！ 此参数用于指定业务操作数据在参数列表中的顺序，从0开始，默认为0，
+                                    即参数列表中的第一个参数.
+                                    如：方法签名为 public Object addDemo(@RequestBody Demo demo) 则业务数
+                                    据参数为demo，是第一个参数，下标记为0，注解中可以写成 dataIndex = 0，
+                                    而默认为0，故此处可以省略dataIndex参数。
+                                    如果方法签名为public Object addDemo(HttpRequest req,@RequestBody Demo demo)
+                                    而涉及到数据业务的参数为demo，为参数列表中的第2个，下标记为1，所以 dataIndex=1,不能省略
+5、parseClass:   与fieldName 配合使用，不填则默认使用DefaultContentParse.class,与此同时，fieldName则为"id"
+                                    (默认值，可不填)如果要使用自定义类，则自定义类必须实现ContentParse接口，                             
+```
+
++ 编写解析类，默认的解析类为使用id查询，自定义的解析类请继承ContentParser接口，并在注解中赋值
 ```
  
 /**
@@ -86,7 +87,16 @@ public class DefaultContentParse implements ContentParser {
 }
  
 ```
-3.默认的操作方式有：
+
+4 . 注解@IgnoreCompare
+
+```$xslt
+    当用户对某数据什么都不修改，直接保存，那么数据库最终可能仅仅修改了一个更新时间，如果你不想让这个修改操作被操作日志记录，
+    1，可以对该数据的任何操作都不记录，即不使用@V4wardLog
+    2,你想记录其它修改操作，但不想记录更新时间的修改，那么可以在实体的属性上面添加这个注解，如 在updateTime上加@IgnoreCompare注解。
+```
+
++ 默认的操作方式有：
  ```
 public class ModifyName {
     public final static String SAVE="新建";
@@ -94,41 +104,53 @@ public class ModifyName {
     public final static String DELETE="删除";
 }
 ```
-4.如需记录操作字段中文请在entity中使用DataName注解
- 如：
- ```
-@DataName(name="操作日期")
-	    private String modifydate;
-```
-5.在启动类上增加控制注解，只有该注解存在时才会启用该记录
-```
-@SpringBootApplication
-@EnableEurekaClient
-@EnableFeignClients
-@EnableLogAspect
-public class UserServiceApplication {
-	public static void main(String[] args) {
-		SpringApplication.run(UserServiceApplication.class, args);
-	}
-}
+
++ 注意事项
+```$xslt
+1、不能将多个@V4wardLog注解使用在嵌套方法上 ，如下错误示例：
+    @V4wardLog()
+    public void funcA(Demo demo){
+        funcB(Demo demo);
+    }
+    @V4wardLog()
+    public void funcB(Demo demo){
+    ...
+    }
+    
+2、可以用在并列方法上，如
+    public void funcA(Demo demo){
+        funcB(Demo demo);
+        funcC(Demo demo);
+    }
+    @V4wardLog()
+    public void funcB(Demo demo){
+    ...
+    }
+    @V4wardLog()
+    public void funcC(Demo demo){
+    ...
+    }
 
 ```
+
 
 ### 展示图
-![输入图片说明](https://gitee.com/uploads/images/2018/0305/115255_5d615e74_1463938.png "深度截图_选择区域_20180305115212.png")
+![操作记录表截图](file:///C:/Users/Thinkpad/Desktop/%E6%96%B0%E5%BB%BA%E6%96%87%E4%BB%B6%E5%A4%B9/pic/log.png "操作记录表截图")
 
 
 ### 建表语句
 ```
-DROP TABLE IF EXISTS `operate_log`;
-CREATE TABLE `operate_log`  (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `username` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作人',
-  `modifydate` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作日期',
-  `modifyname` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作名词',
-  `modifyobject` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作对象',
-  `modifycontent` varchar(3000) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT '操作内容',
-  `modifyip` varchar(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NULL DEFAULT NULL COMMENT 'ip',
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE = InnoDB AUTO_INCREMENT = 1 CHARACTER SET = utf8mb4 COLLATE = utf8mb4_general_ci ROW_FORMAT = Dynamic;
+DROP TABLE IF EXISTS `sys_operate_log`;
+CREATE TABLE `sys_operate_log` (
+  `id` bigint(20) NOT NULL COMMENT ' 主键ID',
+  `data_id` bigint(20) DEFAULT NULL COMMENT '操作数据的主键ID，可用于追踪轨迹',
+  `operate_type` varchar(64) NOT NULL COMMENT '操作类型：新增，修改，删除',
+  `business_name` varchar(255) DEFAULT NULL COMMENT '业务名称或接口URI',
+  `operate_data` json DEFAULT NULL COMMENT '操作数据',
+  `operate_ip` varchar(32) DEFAULT NULL COMMENT '操作用户的IP',
+  `user_id` bigint(20) DEFAULT NULL COMMENT '操作用户ID',
+  `create_emp` varchar(32) DEFAULT NULL COMMENT '操作用户名',
+  `create_time` datetime DEFAULT NULL COMMENT '操作时间',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 ```

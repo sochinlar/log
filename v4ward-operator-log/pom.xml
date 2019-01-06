@@ -35,6 +35,9 @@
         <java.version>1.8</java.version>
         <v4ward.version>0.0.1-SNAPSHOT</v4ward.version>
         <spring.boot.version>2.1.1.RELEASE</spring.boot.version>
+        <mybatis-plus.boot.starter.version>3.0.7</mybatis-plus.boot.starter.version>
+        <alibaba-fastjson.version>1.2.41</alibaba-fastjson.version>
+        <lombok.version>1.18.4</lombok.version>
     </properties>
 
     <dependencies>
@@ -49,24 +52,33 @@
             <version>${spring.boot.version}</version>
         </dependency>
         <dependency>
-            <groupId>com.v4ward</groupId>
-            <artifactId>v4ward-mybatis</artifactId>
-            <version>${v4ward.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>com.v4ward</groupId>
-            <artifactId>v4ward-security</artifactId>
-            <version>${v4ward.version}</version>
+            <groupId>com.baomidou</groupId>
+            <artifactId>mybatis-plus-boot-starter</artifactId>
+            <version>${mybatis-plus.boot.starter.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-starter-jdbc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-jdbc</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.springframework</groupId>
+                    <artifactId>spring-tx</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.41</version>
+            <version>${alibaba-fastjson.version}</version>
         </dependency>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>${lombok.version}</version>
         </dependency>
     </dependencies>
 

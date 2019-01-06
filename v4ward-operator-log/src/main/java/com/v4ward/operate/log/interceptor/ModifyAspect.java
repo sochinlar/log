@@ -1,6 +1,7 @@
 package com.v4ward.operate.log.interceptor;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.v4ward.operate.log.V4wardLog;
 import com.v4ward.operate.log.dto.OperateDataDTO;
@@ -8,7 +9,6 @@ import com.v4ward.operate.log.dto.UpdateDTO;
 import com.v4ward.operate.log.entity.SysOperateLog;
 import com.v4ward.operate.log.parser.ContentParser;
 import com.v4ward.operate.log.service.SysOperateLogService;
-import com.v4ward.operate.log.util.BaseContextHandler;
 import com.v4ward.operate.log.util.ClientUtil;
 import com.v4ward.operate.log.util.ModifyName;
 import com.v4ward.operate.log.util.ReflectionUtils;
@@ -25,6 +25,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -61,8 +62,8 @@ public class ModifyAspect {
         int dataIndex = v4wardLog.dataIndex();
         Object info=joinPoint.getArgs()[dataIndex];
         String[] fields= v4wardLog.fieldName();
-        operateLog.setUserId(BaseContextHandler.getUserId());
         operateLog.setOperateIp(ClientUtil.getClientIp(request));
+        operateLog.setCreateTime(LocalDateTime.now());
         operateLog.setId(IdWorker.getId());
         String handelName= v4wardLog.businessName();
         if("".equals(handelName)){
@@ -119,6 +120,10 @@ public class ModifyAspect {
                 OperateDataDTO operateDataDTO = new OperateDataDTO();
                 operateDataDTO.setId(fieldValues.get("id"));
                 operateDataDTO.setUpdates(changelist);
+                if(CollectionUtils.isEmpty(changelist)){
+                    logger.info("本次操作未修改任何内容，忽略操作日志记录！");
+                    return;
+                }
                 operateLog.setOperateData(operateDataDTO.toString());
 
             } catch (Exception e) {

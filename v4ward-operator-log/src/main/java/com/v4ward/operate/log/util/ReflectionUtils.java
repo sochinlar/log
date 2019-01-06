@@ -1,6 +1,7 @@
 package com.v4ward.operate.log.util;
 
 import com.baomidou.mybatisplus.annotation.TableId;
+import com.v4ward.operate.log.IgnoreCompare;
 import com.v4ward.operate.log.dto.UpdateDTO;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
@@ -334,6 +335,10 @@ public class ReflectionUtils {
 		StringBuilder sb=new StringBuilder();
 		//遍历属性列表field1
 		for(int i=0;i<field1.length;i++) {
+			IgnoreCompare ignore1 = field1[i].getAnnotation(IgnoreCompare.class);
+			if(ignore1!=null){
+				continue;
+			}
 			//遍历属性列表field2
 			for (int j = 0; j < field2.length; j++) {
 				//如果field1[i]属性名与field2[j]属性名内容相同
@@ -344,13 +349,14 @@ public class ReflectionUtils {
 						//如果field1[i]属性值与field2[j]属性值内容不相同
 						if (!compareTwo(field1[i].get(class1), field2[j].get(class2))) {
 							UpdateDTO updateDTO = new UpdateDTO();
-			/**				DataName name=field1[i].getAnnotation(DataName.class);
-							String fieldName="";
-							if(name!=null){
-								fieldName=name.name();
-							}else {
-								fieldName=field1[i].getName();
-							}*/
+
+							//DataName name=field1[i].getAnnotation(DataName.class);
+							//	String fieldName="";
+							//	if(name!=null){
+							//		fieldName=name.name();
+							//	}else {
+							//		fieldName=field1[i].getName();
+							//	}
 							updateDTO.setColumn(field1[i].getName());
 							updateDTO.setOldValue(field1[i].get(class1));
 							updateDTO.setNewValue(field2[j].get(class2));

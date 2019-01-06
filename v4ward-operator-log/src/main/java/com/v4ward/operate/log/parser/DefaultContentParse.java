@@ -16,7 +16,7 @@ import java.util.Map;
  */
 public class DefaultContentParse implements ContentParser {
     @Override
-    public Object getResult(Map<String,Object> feildValues, V4wardLog enableGameleyLog) {
+    public Object getResult(Map<String,Object> feildValues, V4wardLog v4wardLog) {
         Assert.isTrue(feildValues.containsKey("id"),"未解析到id值，请检查前台传递参数是否正确");
         Object result= feildValues.get("id");
         Long id=0L;
@@ -29,7 +29,7 @@ public class DefaultContentParse implements ContentParser {
             id = (Long) result;
         }
         IService service= null;
-        Class cls=enableGameleyLog.serviceClass();
+        Class cls=v4wardLog.serviceClass();
         service = (IService) SpringUtil.getBean(cls);
 
         return  service.getById(id);

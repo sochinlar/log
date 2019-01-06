@@ -55,7 +55,6 @@ public class SysOperateLog extends Model {
     /**
      *操作时间
      */
-    @TableField(fill = FieldFill.INSERT)
     private LocalDateTime createTime;
 
     @Override
