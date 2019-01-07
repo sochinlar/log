@@ -14,6 +14,17 @@
 - aop (已经引入到本包，后续使用不必再引用依赖)
 - lombok (已经引入到本包，后续使用不必再引用依赖)
 ### 使用
+1. 修改pom.xml，去掉父依赖
+```
+   <!--去掉后，在各个   -->
+    <parent>
+        <artifactId>v4ward-parent</artifactId>
+        <groupId>com.v4ward</groupId>
+        <version>0.0.1-SNAPSHOT</version>
+   </parent>
+```
+
+
 1. 添加依赖
 ```
     <dependency>
